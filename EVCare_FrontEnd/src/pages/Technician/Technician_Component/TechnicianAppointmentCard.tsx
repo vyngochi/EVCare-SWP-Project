@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Zoom from "react-medium-image-zoom";
 import { formatDate } from "../../../utils/formatDate";
 import { useGetAppointmentPartCondition } from "../../../services/appointmentPartCondition";
 import type { TechnicianAppointmentsDto } from "../../../models/AppointmentsModel/Technician_Appointments_Model";
@@ -22,6 +21,8 @@ import {
   ChevronUp,
   Image as ImageIcon,
 } from "lucide-react";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 type Props = {
   data: TechnicianAppointmentsDto;
@@ -44,26 +45,37 @@ const TechnicianAppointmentCard: React.FC<Props> = ({
   setViewDetailModal,
   setIsRepairing,
 }) => {
-  const techId = useAppSelector((state) => state.tech.techId);
   const [expandedSections, setExpandedSections] = useState({
     images: false,
     services: false,
   });
   const [isAlert, setIsAlert] = useState(false);
 
-  const { data: appointment, isLoading } = useGetAppointmentPartCondition(
-    data.id
-  );
+  const {
+    data: appointment,
+    isLoading,
+    isFetching,
+  } = useGetAppointmentPartCondition(data.id);
+
+  const {
+    data: techDetail,
+    isLoading: loadAccount,
+    isFetching: fetchAccount,
+  } = useGetAccount();
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const isAnyPartNotDone = data.parts.some(
-    (part) => part.partStatus !== "Done" && part.technicianId === techId
-  );
+  if (isLoading || isFetching || loadAccount || fetchAccount) {
+    return <SpinnerComponent />;
+  }
 
-  console.log("no done" + isAnyPartNotDone);
+  const isAnyPartNotDone = data.parts.some(
+    (part) =>
+      part.partStatus !== "Done" &&
+      part.technicianId === techDetail?.data?.techId
+  );
 
   return (
     <CardContainer>
@@ -149,7 +161,7 @@ const TechnicianAppointmentCard: React.FC<Props> = ({
                 <ImageGrid>
                   {data.appointmentImages.map((img, idx) => (
                     <Zoom key={idx}>
-                      <ImageThumb key={idx} src={img} alt={`img-${idx}`} />
+                      <ImageThumb src={img} alt={`img-${idx}`} />
                     </Zoom>
                   ))}
                 </ImageGrid>
@@ -208,7 +220,7 @@ const TechnicianAppointmentCard: React.FC<Props> = ({
             </SectionTitle>
           </SectionHeader>
           <PartsContainer>
-            {isLoading ? (
+            {isLoading || isFetching ? (
               <SpinnerComponent />
             ) : (appointment?.data?.partDamageLevels?.length || 0) > 0 ? (
               <PartsTable>
@@ -295,4 +307,4 @@ import {
 } from "./Style/TechnicianAppointmentCard.styled";
 import AlertModal from "./AlertModal";
 import ShowButton from "../../../components/Button/ShowButton";
-import { useAppSelector } from "../../../states/store";
+import { useGetAccount } from "../../../services/authService";

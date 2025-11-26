@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TechnicianWorkingSessionEnum } from "../models/enums/TechnicianWorkingSessionEnum";
 import { useGetTechnicianAppointments } from "../services/appointmentTechnicianApi";
 import { useUpdateTechnicianWorkingSession } from "../services/TechnicianWorkingSessionApi";
@@ -12,12 +12,9 @@ export const useTechnician_MyJob = () => {
   const [pageIndex, setPageIndex] = useState<number>(1);
   const queryClient = useQueryClient();
 
-  const savedStatus =
-    sessionStorage.getItem("activeStatus") ||
-    TechnicianWorkingSessionEnum.ADDING_PART;
-  const [activeStatus, setActiveStatus] = useState<string>(savedStatus);
+  const [activeStatus, setActiveStatus] = useState<string>("AddingPart");
 
-  const { data, isLoading } = useGetTechnicianAppointments({
+  const { data, isLoading, isFetching } = useGetTechnicianAppointments({
     Status: String(activeStatus),
     PageSize: pageSize,
     PageIndex: pageIndex,
@@ -25,29 +22,9 @@ export const useTechnician_MyJob = () => {
     SortOrder: "desc",
   });
 
-  useEffect(() => {
-    if (data?.data?.items?.length) {
-      const activeAppointment = data.data.items.find(
-        (appointment) =>
-          appointment.status !== TechnicianWorkingSessionEnum.COMPLETED &&
-          appointment.status !== TechnicianWorkingSessionEnum.CANCELED
-      );
+  const { mutateAsync: updateWorkingSession, isPending: isUpdating } = useUpdateTechnicianWorkingSession();
 
-      if (activeAppointment) {
-        setActiveStatus(activeAppointment.status);
-        sessionStorage.setItem("activeStatus", activeAppointment.status);
-      }
-    }
-  }, [data?.data?.items]);
-
-  const { mutateAsync: updateWorkingSession, isPending: isUpdating } =
-    useUpdateTechnicianWorkingSession();
-
-  const handleUpdateStatus = async (
-    status: TechnicianWorkingSessionEnum,
-    message: string,
-    description: string
-  ) => {
+  const handleUpdateStatus = async (status: TechnicianWorkingSessionEnum, message: string, description: string) => {
     try {
       await updateWorkingSession({
         orderId: data?.data?.items?.at(0)?.orderId ?? 0,
@@ -86,6 +63,7 @@ export const useTechnician_MyJob = () => {
     appointments: data?.data?.items ?? [],
     isLoading: isLoading,
     isUpdating,
+    isFetching,
     sortById,
     pageSize,
     setActiveStatus,

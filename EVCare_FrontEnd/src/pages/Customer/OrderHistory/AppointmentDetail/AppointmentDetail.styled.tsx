@@ -74,10 +74,9 @@ export const Button = styled.button`
 export const Backdrop = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   inset: 0;
-  /* Giảm độ tối, thêm hiệu ứng blur */
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); /* Hỗ trợ Safari */
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
   transition: opacity 0.3s ease;
@@ -146,7 +145,6 @@ export const Legend = styled.p`
 export const Row = styled.div`
   display: flex;
   gap: 20px;
-  // margin-top: 10px;
   align-items: center;
 
   @media (max-width: 480px) {
@@ -264,7 +262,7 @@ export const Status = styled.div`
   position: absolute;
   top: 30px;
   right: 40px;
-  color: #374151; /* Màu tối */
+  color: #374151;
 
   @media (max-width: 480px) {
     font-size: 13px;
@@ -367,11 +365,11 @@ export const ModalContent = styled.div`
     width: 8px;
   }
   &::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05); /* Nền track sáng */
+    background: rgba(0, 0, 0, 0.05);
     border-radius: 10px;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3); /* Thumb tối */
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
   }
   &::-webkit-scrollbar-thumb:hover {
@@ -512,8 +510,8 @@ export const PartQuantity = styled.span`
 export const PartPrices = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end; // Căn phải
-  min-width: 120px; // Đặt chiều rộng tối thiểu
+  align-items: flex-end;
+  min-width: 120px;
   flex-shrink: 0;
 `;
 

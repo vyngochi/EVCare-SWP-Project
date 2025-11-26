@@ -35,7 +35,10 @@ export const useGetTechnicianAppointments = (params?: {
         handleError(error);
       }
     },
-    refetchOnWindowFocus: false,
+
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 };
 
