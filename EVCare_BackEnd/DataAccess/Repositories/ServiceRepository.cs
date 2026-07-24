@@ -35,7 +35,7 @@ namespace DataAccess.Repositories
             }
             var query = _dbSet
                 .AsNoTracking()
-                .Where(s => s.Deleted_At == null && s.Name.Contains(model.Keyword))
+                .Where(s => s.Deleted_At == DateTime.MinValue && s.Name.Contains(model.Keyword))
                 .Select(x=>new ServiceViewModel
                 {
                     Description = x.Description,
