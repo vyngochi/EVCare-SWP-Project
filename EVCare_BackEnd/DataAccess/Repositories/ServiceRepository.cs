@@ -67,7 +67,7 @@ namespace DataAccess.Repositories
                     Description = x.Description,
                     Duration = x.Duration,
                     Id = x.Id,
-                    IsDeleted = x.Deleted_At!= null,
+                    IsDeleted = x.Deleted_At != DateTime.MinValue,
                     Name = x.Name,
                     ServiceCategoryId = x.ServiceCategoryId,
                     Parts = x.ServiceParts
