@@ -218,6 +218,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 <Input.TextArea
                   value={input}
                   autoSize={{ minRows: 1, maxRows: 4 }}
+                  maxLength={500}
+                  showCount
                   onChange={(e) => setInput(e.target.value)}
                   onPressEnter={(e) => {
                     if (!e.shiftKey) {

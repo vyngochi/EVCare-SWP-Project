@@ -137,6 +137,9 @@ const ServiceFormModal: React.FC<Props> = ({ isOpen, onClose, onSuccess, service
     setIsGenerating(true);
     try {
       const result = await generateServiceDetails(formData.name.trim());
+      if (!result) {
+        throw new Error("Received no data from Gemini.");
+      }
       setFormData((prev) => ({
         ...prev,
         description: result.description,
