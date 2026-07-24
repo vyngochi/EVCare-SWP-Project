@@ -214,7 +214,7 @@ builder.Services.Configure<FormOptions>(o =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", p => p
-        .WithOrigins("https://localhost:5173", "http://localhost:5173", "https://ev-care.netlify.app", "https://localhost:7228", "https://evcare.service.signalr.net")
+        .WithOrigins("https://localhost:5173", "http://localhost:5173", "https://ev-care.netlify.app", "https://localhost:7228", "https://evcare.service.signalr.net", "https://ev-care-swp-project.vercel.app")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials());
