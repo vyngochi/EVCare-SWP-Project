@@ -33,10 +33,13 @@ function ServiceComponent({
             >
               <Checkbox
                 type="checkbox"
-                checked={c.services.every((s) => selectedServices.includes(s.id))}
+                disabled={c.services.length === 0}
+                checked={c.services.length > 0 && c.services.every((s) => selectedServices.includes(s.id))}
                 onChange={() => handleServiceCategoriesChange(c)}
               />
-              <span style={{ marginLeft: "10px" }}>{c.name}</span>
+              <span style={{ marginLeft: "10px", color: c.services.length === 0 ? "#9ca3af" : "inherit" }}>
+                {c.name} {c.services.length === 0 && "(No services available)"}
+              </span>
             </div>
             <MoreInfo
               selectedServices={selectedServices}
